@@ -3,6 +3,7 @@
 import rospy
 import queue as Queue
 import math
+import tf
 
 from nav_msgs.msg import OccupancyGrid, GridCells, Path
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped, Point
@@ -24,35 +25,67 @@ class AStarPlanner:
         self.path_cells_pub = rospy.Publisher("/path_cells", GridCells, queue_size=1, latch=True)
         self.path_pub = rospy.Publisher("/planned_path", Path, queue_size=1, latch=True)
 
+        self.listener = tf.TransformListener()
+
         rospy.Subscriber("/map", OccupancyGrid, self.map_callback)
-        rospy.Subscriber("/initialpose", PoseWithCovarianceStamped, self.start_callback)
-        rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.goal_callback)
+        # rospy.Subscriber("/initialpose", PoseWithCovarianceStamped, self.start_callback)
+        rospy.Subscriber("/astar_goal", PoseStamped, self.goal_callback)
 
         rospy.loginfo("A* planner node started.")
         rospy.spin()
 
     def map_callback(self, msg):
         self.map_data = msg
-        self.inflated_obstacles = self.inflate_obstacles(padding_cells=2)
+        self.inflated_obstacles = self.inflate_obstacles(padding_cells=4)
         self.publish_gridcells(self.inflated_obstacles, self.inflated_pub)
         rospy.loginfo_once("Map received and inflated obstacles published.")
 
-    def start_callback(self, msg):
-        if self.map_data is None:
-            rospy.logwarn("Map not received yet.")
-            return
+    def get_robot_start_cell(self):
+        try:
+            self.listener.waitForTransform(
+                "map",
+                "base_footprint",
+                rospy.Time(0),
+                rospy.Duration(1.0)
+            )
 
-        self.start = self.world_to_grid(
-            msg.pose.pose.position.x,
-            msg.pose.pose.position.y
-        )
+            trans, rot = self.listener.lookupTransform(
+                "map",
+                "base_footprint",
+                rospy.Time(0)
+            )
 
-        rospy.loginfo("Start set: %s", str(self.start))
-        self.try_plan()
+            robot_x = trans[0]
+            robot_y = trans[1]
+
+            return self.world_to_grid(robot_x, robot_y)
+
+        except Exception as e:
+            rospy.logwarn("Could not get robot pose from TF: %s", str(e))
+            return None
+
+    # def start_callback(self, msg):
+        # if self.map_data is None:
+        #     rospy.logwarn("Map not received yet.")
+        #     return
+
+        # self.start = self.world_to_grid(
+        #     msg.pose.pose.position.x,
+        #     msg.pose.pose.position.y
+        # )
+
+        # rospy.loginfo("Start set: %s", str(self.start))
+        # self.try_plan()
 
     def goal_callback(self, msg):
         if self.map_data is None:
             rospy.logwarn("Map not received yet.")
+            return
+
+        self.start = self.get_robot_start_cell()
+
+        if self.start is None:
+            rospy.logwarn("Cannot plan because robot start pose is not available.")
             return
 
         self.goal = self.world_to_grid(
@@ -60,7 +93,9 @@ class AStarPlanner:
             msg.pose.position.y
         )
 
+        rospy.loginfo("Start from robot TF: %s", str(self.start))
         rospy.loginfo("Goal set: %s", str(self.goal))
+
         self.try_plan()
 
     def try_plan(self):
@@ -216,7 +251,7 @@ class AStarPlanner:
 
         return world_x, world_y
     
-    def inflate_obstacles(self, padding_cells=2):
+    def inflate_obstacles(self, padding_cells=3):
         inflated = set()
         original_obstacles = set()
 
