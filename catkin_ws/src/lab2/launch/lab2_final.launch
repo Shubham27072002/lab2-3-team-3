@@ -1,0 +1,22 @@
+<launch>
+    <!-- Map file argument -->
+    <arg name="map_file" default="/workspaces/lab2-3-team-3/Maps/maze_1.yaml" />
+
+    <!-- RViz config argument -->
+    <arg name="rviz_config" default="/workspaces/lab2-3-team-3/RViz/lab_2_RViz_config.rviz" />
+
+    <!-- TurtleBot3 navigation without default RViz -->
+    <include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch">
+        <arg name="map_file" value="$(arg map_file)" />
+        <arg name="open_rviz" value="false" />
+    </include>
+
+    <!-- Your RViz config -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" output="screen" />
+
+    <!-- A* planner -->
+    <node pkg="lab2" type="astar_planner.py" name="astar_planner" output="screen" />
+
+    <!-- Waypoint maker / optimizer -->
+    <node pkg="lab2" type="waypoint_maker.py" name="waypoint_maker" output="screen" />
+</launch>

@@ -15,7 +15,7 @@ class PathFollower:
         self.path = []
         self.current_index = 0
 
-        self.waypoint_tolerance = 0.15   # imaginary circle radius in meters
+        self.waypoint_tolerance = 0.05   # imaginary circle radius in meters
         self.linear_speed = 0.12
         self.angular_gain = 1.5
         self.max_angular_speed = 0.6

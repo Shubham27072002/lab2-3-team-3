@@ -65,17 +65,17 @@ class AStarPlanner:
             return None
 
     # def start_callback(self, msg):
-        # if self.map_data is None:
-        #     rospy.logwarn("Map not received yet.")
-        #     return
+    #     if self.map_data is None:
+    #         rospy.logwarn("Map not received yet.")
+    #         return
 
-        # self.start = self.world_to_grid(
-        #     msg.pose.pose.position.x,
-        #     msg.pose.pose.position.y
-        # )
+    #     self.start = self.world_to_grid(
+    #         msg.pose.pose.position.x,
+    #         msg.pose.pose.position.y
+    #     )
 
-        # rospy.loginfo("Start set: %s", str(self.start))
-        # self.try_plan()
+    #     rospy.loginfo("Start set: %s", str(self.start))
+    #     self.try_plan()
 
     def goal_callback(self, msg):
         if self.map_data is None:
