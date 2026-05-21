@@ -1,0 +1,31 @@
+{
+    "ROS2.distro": "humble",
+    "python.autoComplete.extraPaths": [
+        "/home/shubham/ros2_ws/install/temperature/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/build/shubham",
+        "/home/shubham/ros2_ws/install/shubham/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/robot_lab/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/pkg/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/my_py_pkg/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/msmp_py/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/build/Robot_Lab",
+        "/home/shubham/ros2_ws/install/Robot_Lab/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/MSMP_py/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/shubham/ros2_ws/install/temperature/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/build/shubham",
+        "/home/shubham/ros2_ws/install/shubham/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/robot_lab/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/pkg/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/my_py_pkg/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/msmp_py/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/build/Robot_Lab",
+        "/home/shubham/ros2_ws/install/Robot_Lab/lib/python3.10/site-packages",
+        "/home/shubham/ros2_ws/install/MSMP_py/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}
