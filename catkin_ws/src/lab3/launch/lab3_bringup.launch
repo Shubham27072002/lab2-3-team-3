@@ -1,0 +1,18 @@
+<launch>
+
+  <!-- OpenManipulator hardware bringup -->
+  <include file="$(find turtlebot3_manipulation_bringup)/launch/turtlebot3_manipulation_bringup.launch" />
+
+  <!-- Publish TF from /joint_states -->
+  <node pkg="robot_state_publisher"
+        type="robot_state_publisher"
+        name="robot_state_publisher"
+        output="screen" />
+
+  <!-- MoveIt planning and trajectory execution -->
+  <include file="$(find turtlebot3_manipulation_moveit_config)/launch/move_group.launch" />
+
+  <!-- RViz MotionPlanning interface -->
+  <include file="$(find turtlebot3_manipulation_moveit_config)/launch/moveit_rviz.launch" />
+
+</launch>
